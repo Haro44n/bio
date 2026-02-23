@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cherlove Bio</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=Manrope:wght@400;600&display=swap');
+
+        :root {
+            --bg: #050608;
+            --panel: rgba(10, 16, 22, 0.35);
+            --panel-border: rgba(255, 255, 255, 0.2);
+            --text: #f5f9ff;
+            --muted: #aeb8c8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        body {
+            font-family: "Manrope", "Segoe UI", sans-serif;
+        }
+
+        #main-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .video-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: none;
+            z-index: 0;
+            pointer-events: none;
+            background: #000;
+        }
+
+        .bg-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: transparent;
+        }
+
+        .info-card {
+            position: relative;
+            z-index: 3;
+            width: min(92vw, 390px);
+            padding: 34px 24px 26px;
+            border-radius: 30px;
+            text-align: center;
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            box-shadow: 0 28px 60px rgba(0, 0, 0, 0.45);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            opacity: 0;
+            transform: translateY(12px) scale(0.98);
+            transition: opacity 0.55s ease, transform 0.55s ease;
+        }
+
+        body.started .info-card {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .avatar {
+            width: 112px;
+            height: 112px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: url('avatar.png') center/cover no-repeat;
+            border: 2px solid rgba(255, 255, 255, 0.28);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.28);
+        }
+
+        h1 {
+            font-family: "Unbounded", "Segoe UI", sans-serif;
+            font-size: clamp(25px, 4vw, 30px);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .links {
+            display: grid;
+            gap: 11px;
+        }
+
+        .btn {
+            display: block;
+            padding: 13px 14px;
+            border-radius: 14px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.26);
+            background: rgba(255, 255, 255, 0.08);
+            transition: transform 0.18s ease, filter 0.18s ease, background 0.18s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.06);
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .btn-tg { background: #208fcb; }
+        .btn-gh {
+            background: #0e1116;
+            border-color: rgba(255, 255, 255, 0.32);
+        }
+
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at center, rgba(255, 255, 255, 0.98), rgba(240, 243, 247, 0.94)),
+                #fff;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .splash-button {
+            font-family: "Unbounded", "Segoe UI", sans-serif;
+            border: 2px solid #111;
+            background: transparent;
+            color: #111;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 14px 32px;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+        }
+
+        .splash-button:hover {
+            transform: translateY(-2px);
+            background: #111;
+            color: #fff;
+        }
+
+        .splash-hidden {
+            opacity: 0;
+            transform: scale(1.04);
+            pointer-events: none;
+        }
+
+        @media (max-width: 640px) {
+            .info-card {
+                padding: 28px 18px 20px;
+                border-radius: 24px;
+            }
+
+            .avatar {
+                width: 96px;
+                height: 96px;
+                margin-bottom: 14px;
+            }
+
+            .subtitle {
+                margin-bottom: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="main-content">
+        <video id="background-video" autoplay muted loop playsinline preload="auto" class="video-bg">
+            <source src="bg.mp4" type="video/mp4">
+        </video>
+        <div class="bg-overlay" aria-hidden="true"></div>
+
+        <section class="info-card">
+            <div class="avatar"></div>
+            <h1>Cherlove</h1>
+            <p class="subtitle">Python - C++ - Java</p>
+            <div class="links">
+                <a href="https://t.me/cherlovv" target="_blank" rel="noopener noreferrer" class="btn btn-tg">Telegram</a>
+                <a href="https://github.com/Haro44n" target="_blank" rel="noopener noreferrer" class="btn btn-gh">GitHub</a>
+            </div>
+        </section>
+    </div>
+
+    <div id="splash-screen">
+        <button class="splash-button" id="start-button" type="button">CLICK!</button>
+    </div>
+
+    <audio id="background-audio" loop preload="auto">
+        <source src="shirevo.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const splashScreen = document.getElementById('splash-screen');
+        const startButton = document.getElementById('start-button');
+        const video = document.getElementById('background-video');
+        const audio = document.getElementById('background-audio');
+        let started = false;
+
+        function startExperience() {
+            if (started) return;
+            started = true;
+
+            document.body.classList.add('started');
+            splashScreen.classList.add('splash-hidden');
+            setTimeout(() => splashScreen.remove(), 620);
+
+            video.play().catch(() => {});
+            audio.volume = 0.5;
+            audio.play().catch(() => {});
+        }
+
+        startButton.addEventListener('click', startExperience);
+        window.addEventListener('load', () => {
+            video.play().catch(() => {});
+        });
+    </script>
+</body>
+</html>
