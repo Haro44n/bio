@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cherlove Bio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="intro-overlay">
+        <button id="entry-btn">ENTER EXPERIENCE</button>
+    </div>
+
+    <video loop playsinline muted autoplay preload="auto" id="bg-video" style="opacity: 0; transition: opacity 2s ease;">
+        <source src="./background.mp4" type="video/mp4">
+    </video>
+    
+
+    <div id="firefly"></div>
+
+    <div class="content-wrapper" id="main-content">
+        <div class="card">
+            <h1>Cherlove</h1>
+            <p class="subtitle">Python - C++ - Java</p>
+
+            <div class="links">
+                <a href="https://github.com/Haro44n" class="btn">
+                    <span>GitHub</span>
+                    <img src="gh_icon.png" class="btn-full-img" alt="GH">
+                </a>
+                <a href="https://t.me/cherlovv" class="btn">
+                    <span>Telegram</span>
+                    <img src="tg_icon.png" class="btn-full-img" alt="TG">
+                </a>
+                <a href="https://discord.com/users/haro44n" class="btn">
+                    <span>Discord</span>
+                    <img src="ds_icon.png" class="btn-full-img" alt="DS">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const overlay = document.getElementById('intro-overlay');
+        const entryBtn = document.getElementById('entry-btn');
+        const video = document.getElementById('bg-video');
+        const content = document.getElementById('main-content');
+        const firefly = document.getElementById('firefly');
+
+        entryBtn.addEventListener('click', () => {
+            // Анимация вдавливания кнопки
+            entryBtn.classList.add('active');
+
+            // Показываем видео сразу, чтобы не было черного экрана
+            video.style.opacity = '1';
+            
+            overlay.style.opacity = '0';
+            overlay.style.pointerEvents = 'none'; // Чтобы оверлей не мешал кликам во время затухания
+            firefly.style.opacity = '1';
+            
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Видео не смогло запуститься автоматически:", error);
+                });
+            }
+
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                content.style.opacity = '1';
+                content.style.transform = 'scale(1)';
+            }, 800);
+        });
+
+        // Принудительное зацикливание через JS (как дополнение к атрибуту loop)
+        video.addEventListener('ended', function() {
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => console.log("Ошибка при перезапуске:", error));
+            }
+        }, false);
+
+        // Проверка на ошибку загрузки файла
+        video.addEventListener('error', function() {
+            console.error("Критическая ошибка: Файл background.mp4 не найден или поврежден.");
+        }, true);
+
+        // Логика движения светлячка
+        // Инициализируем в центре экрана, чтобы он не вылетал из угла (0,0)
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let flyX = mouseX;
+        let flyY = mouseY;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateFirefly() {
+            // Плавное следование (интерполяция)
+            flyX += (mouseX - flyX) * 0.08;
+            flyY += (mouseY - flyY) * 0.08;
+
+            firefly.style.transform = `translate(${flyX}px, ${flyY}px)`;
+            requestAnimationFrame(animateFirefly);
+        }
+
+        animateFirefly();
+    </script>
+</body>
+</html>
